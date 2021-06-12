@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { DB_URI } = require('./index')
+const DB_URI = process.env.DB_URI
 
 const dbOptions = {
     useNewUrlParser: true,
