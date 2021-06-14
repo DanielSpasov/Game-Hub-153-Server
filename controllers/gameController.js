@@ -14,6 +14,11 @@ router.get('/getAll', async (req, res) => {
     res.json(response)
 })
 
+router.get('/getOne/:id', async (req, res) => {
+    let response = await gameService.getOne(req, res)
+    res.json(response)
+})
+
 
 
 

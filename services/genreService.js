@@ -19,9 +19,19 @@ const getAll = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const getOne = async (req, res) => {
+    try {
+        const genre = Genre
+            .findById(req.params.id)
+            .populate('games')
+        return genre
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
     create,
     getAll,
+    getOne,
 }
