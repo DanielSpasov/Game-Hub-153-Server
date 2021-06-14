@@ -4,8 +4,9 @@ const homeController = require('./controllers/homeController')
 
 const userController = require('./controllers/userController')
 
-const gamesController = require('./controllers/gamesController')
+const gameController = require('./controllers/gameController')
 const genreController = require('./controllers/genreController')
+const devController = require('./controllers/devController')
 
 
 
@@ -13,7 +14,8 @@ router.use('/', homeController)
 
 router.use('/user', userController)
 
-router.use('/games', gamesController)
+router.use('/games', gameController)
+router.use('/devs', devController)
 router.use('/genres', genreController)
 
 router.get('*', (req, res) => {
