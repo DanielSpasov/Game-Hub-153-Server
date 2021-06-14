@@ -1,18 +1,19 @@
 const router = require('express').Router()
 
-const gamesService = require('../services/gamesService')
+const gameService = require('../services/gameService')
 
 
 
 router.post('/add', async (req, res) => {
-    let promise = await gamesService.create(req.body)
-    res.json(promise)
+    let response = await gameService.create(req, res)
+    res.json(response)
 })
 
 router.get('/getAll', async (req, res) => {
-    let promise = await gamesService.getAll()
-    res.json(promise)
+    let response = await gameService.getAll(req, res)
+    res.json(response)
 })
+
 
 
 

@@ -1,8 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-
-    let outputMessage = `Error: ${err.message}`
-
-    return outputMessage
+    res.status(400).json({ msg: err._message })
 }
 
 module.exports = errorHandler
