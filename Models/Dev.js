@@ -17,10 +17,10 @@ const devSchema = new mongoose.Schema({
         minLnegth: 10,
         required: true,
     },
-    gamesByDev: {
-        type: Array,
-        default: [],
-    },
+    gamesByDev: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Game',
+    }],
     upvotes: {
         type: Number,
         default: 0,

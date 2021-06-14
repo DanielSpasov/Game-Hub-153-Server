@@ -28,10 +28,18 @@ const getOne = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const editOne = async (req, res) => {
+    try {
+        const genre = Genre.findByIdAndUpdate(req.params.id, req.body.data)
+        return genre
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
     create,
     getAll,
     getOne,
+    editOne,
 }

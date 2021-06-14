@@ -29,10 +29,18 @@ const getOne = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const editOne = async (req, res) => {
+    try {
+        const game = Game.findByIdAndUpdate(req.params.id, req.body.data)
+        return game
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
     create,
     getAll,
     getOne,
+    editOne,
 }

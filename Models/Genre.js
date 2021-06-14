@@ -17,10 +17,10 @@ const genreSchema = new mongoose.Schema({
         minLnegth: 10,
         required: true,
     },
-    gamesInGenre: {
-        type: Array,
-        default: [],
-    },
+    gamesInGenre: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Game',
+    }],
     upvotes: {
         type: Number,
         default: 0,

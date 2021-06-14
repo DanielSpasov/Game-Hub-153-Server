@@ -21,9 +21,14 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
     try {
-        const dev = Dev
-            .findById(req.params.id)
-            // .populate('games')
+        const dev = Dev.findById(req.params.id)
+        return dev
+    } catch (err) { errorHandler(err, req, res) }
+}
+
+const editOne = async (req, res) => {
+    try {
+        const dev = Dev.findByIdAndUpdate(req.params.id, req.body.data)
         return dev
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -34,4 +39,5 @@ module.exports = {
     create,
     getAll,
     getOne,
+    editOne,
 }

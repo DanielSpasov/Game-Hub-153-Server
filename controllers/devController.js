@@ -19,6 +19,10 @@ router.get('/getOne/:id', async (req, res) => {
     res.json(response)
 })
 
+router.post('/editOne/:id', async (req, res) => {
+    let response = await devService.editOne(req, res)
+    res.json(response)
+})
 
 
 
