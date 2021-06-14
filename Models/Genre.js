@@ -17,6 +17,10 @@ const genreSchema = new mongoose.Schema({
         minLnegth: 10,
         required: true,
     },
+    gamesInGenre: {
+        type: Array,
+        default: [],
+    },
     upvotes: {
         type: Number,
         default: 0,

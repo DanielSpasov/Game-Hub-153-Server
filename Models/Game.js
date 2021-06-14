@@ -24,6 +24,16 @@ const gameSchema = new mongoose.Schema({
     videoUrl: {
         type: String,
     },
+    genre: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Genre',
+    },
+    dev: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Dev',
+    },
     upvotes: {
         type: Number,
         default: 0,
