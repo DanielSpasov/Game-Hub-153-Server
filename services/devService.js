@@ -38,10 +38,14 @@ const upvote = async (req, res) => {
 
         let reqDev = req.body.data
 
-        if (reqDev.usersUpvoted.includes(req.body.userID)) throw new Error('You have already upvoted this developer.')
-
-        reqDev.upvotes += 1
-        reqDev.usersUpvoted.push(req.body.userID)
+        if (reqDev.usersUpvoted.includes(req.body.userID)) {
+            let startIndex = reqDev.usersUpvoted.indexOf(req.body.userID)
+            reqDev.usersUpvoted.splice(startIndex, 1)
+            reqDev.upvotes -= 1
+        } else {
+            reqDev.upvotes += 1
+            reqDev.usersUpvoted.push(req.body.userID)
+        }
 
         const dev = Dev.findByIdAndUpdate(req.body.data._id, reqDev)
         return dev

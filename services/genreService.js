@@ -40,10 +40,14 @@ const upvote = async (req, res) => {
 
         let reqGenre = req.body.data
 
-        if (reqGenre.usersUpvoted.includes(req.body.userID)) throw new Error('You have already upvoted this genre.')
-
-        reqGenre.upvotes += 1
-        reqGenre.usersUpvoted.push(req.body.userID)
+        if (reqGenre.usersUpvoted.includes(req.body.userID)) {
+            let startIndex = reqGenre.usersUpvoted.indexOf(req.body.userID)
+            reqGenre.usersUpvoted.splice(startIndex, 1)
+            reqGenre.upvotes -= 1
+        } else {
+            reqGenre.upvotes += 1
+            reqGenre.usersUpvoted.push(req.body.userID)
+        }
 
         const genre = Genre.findByIdAndUpdate(req.body.data._id, reqGenre)
         return genre

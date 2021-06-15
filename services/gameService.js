@@ -41,10 +41,14 @@ const upvote = async (req, res) => {
 
         let reqGame = req.body.data
 
-        if (reqGame.usersUpvoted.includes(req.body.userID)) throw new Error('You have already upvoted this game.')
-
-        reqGame.upvotes += 1
-        reqGame.usersUpvoted.push(req.body.userID)
+        if (reqGame.usersUpvoted.includes(req.body.userID)) {
+            let startIndex = reqGame.usersUpvoted.indexOf(req.body.userID)
+            reqGame.usersUpvoted.splice(startIndex, 1)
+            reqGame.upvotes -= 1
+        } else {
+            reqGame.upvotes += 1
+            reqGame.usersUpvoted.push(req.body.userID)
+        }
 
         const game = Game.findByIdAndUpdate(req.body.data._id, reqGame)
         return game
