@@ -36,6 +36,22 @@ const editOne = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const upvote = async (req, res) => {
+    try {
+
+        let reqGame = req.body.data
+
+        if (reqGame.usersUpvoted.includes(req.body.userID)) throw new Error('You have already upvoted this game.')
+
+        reqGame.upvotes += 1
+        reqGame.usersUpvoted.push(req.body.userID)
+
+        const game = Game.findByIdAndUpdate(req.body.data._id, reqGame)
+        return game
+
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -43,4 +59,5 @@ module.exports = {
     getAll,
     getOne,
     editOne,
+    upvote,
 }

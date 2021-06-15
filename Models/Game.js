@@ -38,10 +38,10 @@ const gameSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    usersUpvoted: {
-        type: Array,
-        default: [],
-    },
+    usersUpvoted: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+    }],
     comments: {
         type: Array,
         default: [],
@@ -51,10 +51,10 @@ const gameSchema = new mongoose.Schema({
         required: true,
         ref: 'User',
     },
-    authrorizedEditors: {
-        type: Array,
-        default: [],
-    }
+    authrorizedEditors: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+    }]
 })
 
 module.exports = mongoose.model('Game', gameSchema)

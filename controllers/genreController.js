@@ -24,6 +24,11 @@ router.post('/editOne/:id', async (req, res) => {
     res.json(response)
 })
 
+router.post('/upvote/:id', async (req, res) => {
+    let response = await genreService.upvote(req, res)
+    res.json(response)
+})
+
 
 
 
