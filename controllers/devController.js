@@ -29,6 +29,11 @@ router.post('/upvote/:id', async (req, res) => {
     res.json(response)
 })
 
+router.get('/topFive', async (req, res) => {
+    let response = await devService.getTopFive(req, res)
+    res.json(response)
+})
+
 
 
 module.exports = router

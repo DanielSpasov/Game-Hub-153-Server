@@ -29,6 +29,11 @@ router.post('/upvote/:id', async (req, res) => {
     res.json(response)
 })
 
+router.get('/topFive', async (req, res) => {
+    let response = await gameService.getTopFive(req, res)
+    res.json(response)
+})
+
 
 
 

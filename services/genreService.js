@@ -51,6 +51,14 @@ const upvote = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const getTopFive = async (req, res) => {
+    try {
+        let genres = await Genre.find({})
+        genres = genres.sort((a, b) => b.upvotes - a.upvotes).slice(0, 5)
+        return genres
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -59,4 +67,5 @@ module.exports = {
     getOne,
     editOne,
     upvote,
+    getTopFive,
 }
