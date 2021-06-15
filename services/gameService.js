@@ -60,6 +60,13 @@ const getTopFive = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const deleteGame = async (req, res) => {
+    try {
+        let deletedGame = await Game.findByIdAndDelete(req.params.id)
+        return deletedGame
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -69,4 +76,5 @@ module.exports = {
     editOne,
     upvote,
     getTopFive,
+    deleteGame,
 }

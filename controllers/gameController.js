@@ -34,6 +34,11 @@ router.get('/topFive', async (req, res) => {
     res.json(response)
 })
 
+router.get('/delete/:id', async (req, res) => {
+    let response = await gameService.deleteGame(req, res)
+    res.json(response)
+})
+
 
 
 

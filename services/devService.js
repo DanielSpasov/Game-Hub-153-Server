@@ -57,6 +57,13 @@ const getTopFive = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const deleteDev = async (req, res) => {
+    try {
+        let deletedDev = await Dev.findByIdAndDelete(req.params.id)
+        return deletedDev
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -66,4 +73,5 @@ module.exports = {
     editOne,
     upvote,
     getTopFive,
+    deleteDev,
 }
