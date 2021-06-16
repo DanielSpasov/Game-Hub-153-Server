@@ -51,7 +51,7 @@ const gameSchema = new mongoose.Schema({
         required: true,
         ref: 'User',
     },
-    authrorizedEditors: [{
+    authorizedEditors: [{
         type: mongoose.Types.ObjectId,
         ref: 'User',
     }]
