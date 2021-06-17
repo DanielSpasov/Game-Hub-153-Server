@@ -71,6 +71,15 @@ const deleteGame = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const comment = async (req, res) => {
+    try {
+        let reqGame = await Game.findById(req.params.id)
+        reqGame.comments.push({ author: req.body.username, content: req.body.content })
+        const game = await Game.findByIdAndUpdate(req.params.id, reqGame)
+        return game
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -81,4 +90,5 @@ module.exports = {
     upvote,
     getTopFive,
     deleteGame,
+    comment,
 }

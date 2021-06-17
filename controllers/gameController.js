@@ -39,6 +39,11 @@ router.get('/delete/:id', async (req, res) => {
     res.json(response)
 })
 
+router.post('/comment/:id', async (req, res) => {
+    let response = await gameService.comment(req, res)
+    res.json(response)
+})
+
 
 
 

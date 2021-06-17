@@ -68,6 +68,15 @@ const deleteDev = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const comment = async (req, res) => {
+    try {
+        let reqDev = await Dev.findById(req.params.id)
+        reqDev.comments.push({ author: req.body.username, content: req.body.content })
+        const dev = await Dev.findByIdAndUpdate(req.params.id, reqDev)
+        return dev
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -78,4 +87,5 @@ module.exports = {
     upvote,
     getTopFive,
     deleteDev,
+    comment,
 }
