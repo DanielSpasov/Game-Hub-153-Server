@@ -4,8 +4,8 @@
   "description": "Backend for Game-Hub-153",
   "main": "index.js",
   "scripts": {
-    "start": "SET NODE_ENV=production && node index.js",
-    "test": "SET NODE_ENV=development && nodemon index.js"
+    "start": "SET NODE_ENV=production&& node index.js",
+    "test": "SET NODE_ENV=development&& nodemon index.js"
   },
   "repository": {
     "type": "git",
