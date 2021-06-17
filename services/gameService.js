@@ -50,7 +50,10 @@ const upvote = async (req, res) => {
             reqGame.usersUpvoted.push(req.body.userID)
         }
 
-        const game = Game.findByIdAndUpdate(req.body.data._id, reqGame)
+        const game = Game
+            .findByIdAndUpdate(req.body.data._id, reqGame)
+            .populate('genre')
+            .populate('dev')
         return game
 
     } catch (err) { errorHandler(err, req, res) }
