@@ -65,8 +65,10 @@ const getTopFive = async (req, res) => {
 
 const deleteGenre = async (req, res) => {
     try {
+        let genre = await Genre.findById(req.params.id)
+        if (req.body.userID != genre.creator) return false
         let deletedGenre = await Genre.findByIdAndDelete(req.params.id)
-        return deletedGenre
+        if (deletedGenre) return true
     } catch (err) { errorHandler(err, req, res) }
 }
 

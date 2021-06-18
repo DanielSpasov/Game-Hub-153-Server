@@ -69,8 +69,10 @@ const getTopFive = async (req, res) => {
 
 const deleteGame = async (req, res) => {
     try {
+        let game = await Game.findById(req.params.id)
+        if (req.body.userID != game.creator) return false
         let deletedGame = await Game.findByIdAndDelete(req.params.id)
-        return deletedGame
+        if (deletedGame) return true
     } catch (err) { errorHandler(err, req, res) }
 }
 

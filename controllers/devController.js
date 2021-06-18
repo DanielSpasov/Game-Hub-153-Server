@@ -34,7 +34,7 @@ router.get('/topFive', async (req, res) => {
     res.json(response)
 })
 
-router.get('/delete/:id', async (req, res) => {
+router.post('/delete/:id', async (req, res) => {
     let response = await devService.deleteDev(req, res)
     res.json(response)
 })

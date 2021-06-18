@@ -63,8 +63,10 @@ const getTopFive = async (req, res) => {
 
 const deleteDev = async (req, res) => {
     try {
+        let dev = await Dev.findById(req.params.id)
+        if (req.body.userID != dev.creator) return false
         let deletedDev = await Dev.findByIdAndDelete(req.params.id)
-        return deletedDev
+        if (deletedDev) return true
     } catch (err) { errorHandler(err, req, res) }
 }
 
