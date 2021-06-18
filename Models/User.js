@@ -13,7 +13,23 @@ const userSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-    }
+    },
+    roles: {
+        type: Array,
+        default: ['user']
+    },
+    upvotedGames: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Game',
+    }],
+    upvotedGenres: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Genre',
+    }],
+    upvotedDevs: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Dev',
+    }],
 })
 
 module.exports = mongoose.model('User', userSchema)
