@@ -38,19 +38,23 @@ const editOne = async (req, res) => {
 const upvote = async (req, res) => {
     try {
 
-        let reqGenre = req.body.data
+        let genre = await Genre
+            .findById(req.params.id)
+            .populate('gamesInGenre')
 
-        if (reqGenre.usersUpvoted.includes(req.body.userID)) {
-            let startIndex = reqGenre.usersUpvoted.indexOf(req.body.userID)
-            reqGenre.usersUpvoted.splice(startIndex, 1)
-            reqGenre.upvotes -= 1
+        // REMOVE UPVOTE
+        if (genre.usersUpvoted.includes(req.body.userID)) {
+            genre.upvotes -= 1
+            let userIdIndex = genre.usersUpvoted.indexOf(req.body.userID)
+            genre.usersUpvoted.splice(userIdIndex, 1)
+
+        // UPVOTE
         } else {
-            reqGenre.upvotes += 1
-            reqGenre.usersUpvoted.push(req.body.userID)
+            genre.upvotes += 1
+            genre.usersUpvoted.push(req.body.userID)
         }
 
-        const genre = Genre.findByIdAndUpdate(req.body.data._id, reqGenre)
-        return genre
+        return await genre.save()
 
     } catch (err) { errorHandler(err, req, res) }
 }

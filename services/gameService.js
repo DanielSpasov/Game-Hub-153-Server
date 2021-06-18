@@ -80,23 +80,24 @@ const editOne = async (req, res) => {
 const upvote = async (req, res) => {
     try {
 
-        let game = await Game.findById(req.params.id)
+        let game = await Game
+            .findById(req.params.id)
+            .populate('genre')
+            .populate('dev')
 
         // REMOVE UPVOTE
-        if(game.usersUpvoted.includes(req.body.userID)) {
+        if (game.usersUpvoted.includes(req.body.userID)) {
             game.upvotes -= 1
             let userIdIndex = game.usersUpvoted.indexOf(req.body.userID)
             game.usersUpvoted.splice(userIdIndex, 1)
-            game.save()
 
         // UPVOTE
         } else {
             game.upvotes += 1
             game.usersUpvoted.push(req.body.userID)
-            game.save()
         }
 
-        return game
+        return await game.save()
 
     } catch (err) { errorHandler(err, req, res) }
 }

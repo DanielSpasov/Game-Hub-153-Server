@@ -38,19 +38,23 @@ const editOne = async (req, res) => {
 const upvote = async (req, res) => {
     try {
 
-        let reqDev = req.body.data
+        let dev = await Dev
+            .findById(req.params.id)
+            .populate('gamesByDev')
 
-        if (reqDev.usersUpvoted.includes(req.body.userID)) {
-            let startIndex = reqDev.usersUpvoted.indexOf(req.body.userID)
-            reqDev.usersUpvoted.splice(startIndex, 1)
-            reqDev.upvotes -= 1
+        // REMOVE UPVOTE
+        if (dev.usersUpvoted.includes(req.body.userID)) {
+            dev.upvotes -= 1
+            let userIdIndex = dev.usersUpvoted.indexOf(req.body.userID)
+            dev.usersUpvoted.splice(userIdIndex, 1)
+
+        // UPVOTE
         } else {
-            reqDev.upvotes += 1
-            reqDev.usersUpvoted.push(req.body.userID)
+            dev.upvotes += 1
+            dev.usersUpvoted.push(req.body.userID)
         }
 
-        const dev = Dev.findByIdAndUpdate(req.body.data._id, reqDev)
-        return dev
+        return await dev.save()
 
     } catch (err) { errorHandler(err, req, res) }
 }
