@@ -53,7 +53,7 @@ const editOne = async (req, res) => {
             let oldIndex = oldGenre.gamesInGenre.indexOf(req.params.id)
             oldGenre.gamesInGenre.splice(oldIndex, 1)
             oldGenre.save()
-            
+
             // ADD THE GAME TO THE NEW GENRE
             let newGenre = await Genre.findById(newGame.genre)
             newGenre.gamesInGenre.push(req.params.id)
@@ -65,7 +65,7 @@ const editOne = async (req, res) => {
             let oldIndex = oldDev.gamesByDev.indexOf(req.params.id)
             oldDev.gamesByDev.splice(oldIndex, 1)
             oldDev.save()
-            
+
             // ADD THE GAME TO THE NEW DEV
             let newDev = await Dev.findById(newGame.dev)
             newDev.gamesByDev.push(req.params.id)
@@ -80,21 +80,22 @@ const editOne = async (req, res) => {
 const upvote = async (req, res) => {
     try {
 
-        let reqGame = req.body.data
+        let game = await Game.findById(req.params.id)
 
-        if (reqGame.usersUpvoted.includes(req.body.userID)) {
-            let startIndex = reqGame.usersUpvoted.indexOf(req.body.userID)
-            reqGame.usersUpvoted.splice(startIndex, 1)
-            reqGame.upvotes -= 1
+        // REMOVE UPVOTE
+        if(game.usersUpvoted.includes(req.body.userID)) {
+            game.upvotes -= 1
+            let userIdIndex = game.usersUpvoted.indexOf(req.body.userID)
+            game.usersUpvoted.splice(userIdIndex, 1)
+            game.save()
+
+        // UPVOTE
         } else {
-            reqGame.upvotes += 1
-            reqGame.usersUpvoted.push(req.body.userID)
+            game.upvotes += 1
+            game.usersUpvoted.push(req.body.userID)
+            game.save()
         }
 
-        const game = Game
-            .findByIdAndUpdate(req.body.data._id, reqGame)
-            .populate('genre')
-            .populate('dev')
         return game
 
     } catch (err) { errorHandler(err, req, res) }
