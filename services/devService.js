@@ -21,7 +21,9 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
     try {
-        const dev = Dev.findById(req.params.id)
+        const dev = Dev
+            .findById(req.params.id)
+            .populate('gamesByDev')
         return dev
     } catch (err) { errorHandler(err, req, res) }
 }

@@ -23,7 +23,7 @@ const getOne = async (req, res) => {
     try {
         const genre = Genre
             .findById(req.params.id)
-            .populate('games')
+            .populate('gamesInGenre')
         return genre
     } catch (err) { errorHandler(err, req, res) }
 }
