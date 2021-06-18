@@ -1,6 +1,7 @@
 const errorHandler = require('../middlewares/errorHandler')
 
 
+const User = require('../Models/User')
 const Dev = require('../Models/Dev')
 
 
@@ -38,6 +39,9 @@ const editOne = async (req, res) => {
 const upvote = async (req, res) => {
     try {
 
+        let user = await User
+            .findById(req.body.userID)
+
         let dev = await Dev
             .findById(req.params.id)
             .populate('gamesByDev')
@@ -48,10 +52,17 @@ const upvote = async (req, res) => {
             let userIdIndex = dev.usersUpvoted.indexOf(req.body.userID)
             dev.usersUpvoted.splice(userIdIndex, 1)
 
+            let devIdIndex = user.upvotedDevs.indexOf(req.params.id)
+            user.upvotedDevs.splice(devIdIndex, 1)
+            await user.save()
+
         // UPVOTE
         } else {
             dev.upvotes += 1
             dev.usersUpvoted.push(req.body.userID)
+            
+            user.upvotedDevs.push(dev._id)
+            await user.save()
         }
 
         return await dev.save()

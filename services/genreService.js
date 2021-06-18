@@ -1,6 +1,7 @@
 const errorHandler = require('../middlewares/errorHandler')
 
 
+const User = require('../Models/User')
 const Genre = require('../Models/Genre')
 
 
@@ -38,6 +39,9 @@ const editOne = async (req, res) => {
 const upvote = async (req, res) => {
     try {
 
+        let user = await User
+            .findById(req.body.userID)
+
         let genre = await Genre
             .findById(req.params.id)
             .populate('gamesInGenre')
@@ -48,10 +52,17 @@ const upvote = async (req, res) => {
             let userIdIndex = genre.usersUpvoted.indexOf(req.body.userID)
             genre.usersUpvoted.splice(userIdIndex, 1)
 
+            let genreIdIndex = user.upvotedGenres.indexOf(req.params.id)
+            user.upvotedGenres.splice(genreIdIndex, 1)
+            await user.save()
+
         // UPVOTE
         } else {
             genre.upvotes += 1
             genre.usersUpvoted.push(req.body.userID)
+            
+            user.upvotedGenres.push(genre._id)
+            await user.save()
         }
 
         return await genre.save()
