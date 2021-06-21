@@ -139,6 +139,25 @@ const comment = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const authorizeEditor = async (req, res) => {
+    try {
+
+        const game = await Game.findById(req.params.id)
+        if (req.body.userID != game.creator) throw ({ _message: 'You don\'t have permission to authorize editors' })
+
+        const editorAccount = await User.findOne({ email: req.body.editorEmail })
+        if (!editorAccount) throw ({ _message: 'User with this email doesn\'t exist' })
+
+        if (editorAccount._id == req.body.userID) throw ({ _message: 'You cannot add yourself to the editors' })
+
+        if (game.authorizedEditors.includes(editorAccount._id)) throw ({ _message: 'This user is already editor' })
+
+        game.authorizedEditors.push(editorAccount._id)
+        return await game.save()
+
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -150,4 +169,5 @@ module.exports = {
     getTopFive,
     deleteGame,
     comment,
+    authorizeEditor,
 }

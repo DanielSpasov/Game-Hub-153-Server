@@ -44,6 +44,11 @@ router.post('/comment/:id', async (req, res) => {
     res.json(response)
 })
 
+router.post('/authorizeEditor/:id', async (req, res) => {
+    let response = await genreService.authorizeEditor(req, res)
+    res.json(response)
+})
+
 
 
 

@@ -56,11 +56,11 @@ const upvote = async (req, res) => {
             user.upvotedGenres.splice(genreIdIndex, 1)
             await user.save()
 
-        // UPVOTE
+            // UPVOTE
         } else {
             genre.upvotes += 1
             genre.usersUpvoted.push(req.body.userID)
-            
+
             user.upvotedGenres.push(genre._id)
             await user.save()
         }
@@ -96,6 +96,25 @@ const comment = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const authorizeEditor = async (req, res) => {
+    try {
+
+        const genre = await Genre.findById(req.params.id)
+        if (req.body.userID != genre.creator) throw ({ _message: 'You don\'t have permission to authorize editors' })
+
+        const editorAccount = await User.findOne({ email: req.body.editorEmail })
+        if (!editorAccount) throw ({ _message: 'User with this email doesn\'t exist' })
+
+        if (editorAccount._id == req.body.userID) throw ({ _message: 'You cannot add yourself to the editors' })
+
+        if (genre.authorizedEditors.includes(editorAccount._id)) throw ({ _message: 'This user is already editor' })
+
+        genre.authorizedEditors.push(editorAccount._id)
+        return await genre.save()
+
+    } catch (err) { errorHandler(err, req, res) }
+}
+
 
 
 module.exports = {
@@ -107,4 +126,5 @@ module.exports = {
     getTopFive,
     deleteGenre,
     comment,
+    authorizeEditor,
 }
