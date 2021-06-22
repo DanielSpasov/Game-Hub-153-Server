@@ -38,6 +38,7 @@ const getOne = async (req, res) => {
             .findById(req.params.id)
             .populate('genre')
             .populate('dev')
+            .populate('authorizedEditors', 'email')
         return game
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -158,6 +159,19 @@ const authorizeEditor = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const removeEditor = async (req, res) => {
+
+    let game = await Game.findById(req.params.id)
+    if (game.creator != req.body.userID) throw ({ _message: 'You don\'t have permission to remove editors' })
+
+    if (!game.authorizedEditors.includes(req.body.editorID)) throw ({ _message: 'The selected user is not an editor' })
+
+    let startIndex = game.authorizedEditors.indexOf(req.body.editorID)
+    game.authorizedEditors.splice(startIndex, 1)
+
+    return await game.save()
+}
+
 
 
 module.exports = {
@@ -170,4 +184,5 @@ module.exports = {
     deleteGame,
     comment,
     authorizeEditor,
+    removeEditor,
 }

@@ -49,6 +49,11 @@ router.post('/authorizeEditor/:id', async (req, res) => {
     res.json(response)
 })
 
+router.post('/removeEditor/:id', async (req, res) => {
+    let response = await devService.removeEditor(req, res)
+    res.json(response)
+})
+
 
 
 module.exports = router

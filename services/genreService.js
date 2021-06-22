@@ -25,6 +25,7 @@ const getOne = async (req, res) => {
         const genre = Genre
             .findById(req.params.id)
             .populate('gamesInGenre')
+            .populate('authorizedEditors', 'email')
         return genre
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -115,6 +116,19 @@ const authorizeEditor = async (req, res) => {
     } catch (err) { errorHandler(err, req, res) }
 }
 
+const removeEditor = async (req, res) => {
+
+    let genre = await Genre.findById(req.params.id)
+    if (genre.creator != req.body.userID) throw ({ _message: 'You don\'t have permission to remove editors' })
+
+    if (!genre.authorizedEditors.includes(req.body.editorID)) throw ({ _message: 'The selected user is not an editor' })
+
+    let startIndex = genre.authorizedEditors.indexOf(req.body.editorID)
+    genre.authorizedEditors.splice(startIndex, 1)
+
+    return await genre.save()
+}
+
 
 
 module.exports = {
@@ -127,4 +141,5 @@ module.exports = {
     deleteGenre,
     comment,
     authorizeEditor,
+    removeEditor,
 }
