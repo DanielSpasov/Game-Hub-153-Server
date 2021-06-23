@@ -74,8 +74,8 @@ const editOne = async (req, res) => {
             newDev.save()
         }
 
-        const game = Game.findByIdAndUpdate(req.params.id, req.body.data)
-        return game
+        await Game.findByIdAndUpdate(req.params.id, req.body.data)
+        return await getOne(req, res)
     } catch (err) { errorHandler(err, req, res) }
 }
 

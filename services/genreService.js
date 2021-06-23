@@ -32,8 +32,8 @@ const getOne = async (req, res) => {
 
 const editOne = async (req, res) => {
     try {
-        const genre = Genre.findByIdAndUpdate(req.params.id, req.body.data)
-        return genre
+        await Genre.findByIdAndUpdate(req.params.id, req.body.data)
+        return await getOne(req, res)
     } catch (err) { errorHandler(err, req, res) }
 }
 
