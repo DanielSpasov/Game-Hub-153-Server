@@ -43,9 +43,7 @@ const upvote = async (req, res) => {
         let user = await User
             .findById(req.body.userID)
 
-        let dev = await Dev
-            .findById(req.params.id)
-            .populate('gamesByDev')
+        let dev = await getOne(req, res)
 
         // REMOVE UPVOTE
         if (dev.usersUpvoted.includes(req.body.userID)) {
@@ -57,11 +55,11 @@ const upvote = async (req, res) => {
             user.upvotedDevs.splice(devIdIndex, 1)
             await user.save()
 
-        // UPVOTE
+            // UPVOTE
         } else {
             dev.upvotes += 1
             dev.usersUpvoted.push(req.body.userID)
-            
+
             user.upvotedDevs.push(dev._id)
             await user.save()
         }
@@ -111,7 +109,9 @@ const authorizeEditor = async (req, res) => {
         if (dev.authorizedEditors.includes(editorAccount._id)) throw ({ _message: 'This user is already editor' })
 
         dev.authorizedEditors.push(editorAccount._id)
-        return await dev.save()
+        await dev.save()
+
+        return await getOne(req, res)
 
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -125,8 +125,9 @@ const removeEditor = async (req, res) => {
 
     let startIndex = dev.authorizedEditors.indexOf(req.body.editorID)
     dev.authorizedEditors.splice(startIndex, 1)
+    await dev.save()
 
-    return await dev.save()
+    return await getOne(req, res)
 }
 
 

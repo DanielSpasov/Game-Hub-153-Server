@@ -43,9 +43,7 @@ const upvote = async (req, res) => {
         let user = await User
             .findById(req.body.userID)
 
-        let genre = await Genre
-            .findById(req.params.id)
-            .populate('gamesInGenre')
+        let genre = await getOne(req, res)
 
         // REMOVE UPVOTE
         if (genre.usersUpvoted.includes(req.body.userID)) {
@@ -111,7 +109,9 @@ const authorizeEditor = async (req, res) => {
         if (genre.authorizedEditors.includes(editorAccount._id)) throw ({ _message: 'This user is already editor' })
 
         genre.authorizedEditors.push(editorAccount._id)
-        return await genre.save()
+        await genre.save()
+
+        return await getOne(req, res)
 
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -125,8 +125,9 @@ const removeEditor = async (req, res) => {
 
     let startIndex = genre.authorizedEditors.indexOf(req.body.editorID)
     genre.authorizedEditors.splice(startIndex, 1)
+    await genre.save()
 
-    return await genre.save()
+    return await getOne(req, res)
 }
 
 
