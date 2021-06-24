@@ -117,17 +117,20 @@ const authorizeEditor = async (req, res) => {
 }
 
 const removeEditor = async (req, res) => {
+    try {
 
-    let dev = await Dev.findById(req.params.id)
-    if (dev.creator != req.body.userID) throw ({ _message: 'You don\'t have permission to remove editors' })
+        let dev = await Dev.findById(req.params.id)
+        if (dev.creator != req.body.userID) throw ({ _message: 'You don\'t have permission to remove editors' })
 
-    if (!dev.authorizedEditors.includes(req.body.editorID)) throw ({ _message: 'The selected user is not an editor' })
+        if (!dev.authorizedEditors.includes(req.body.editorID)) throw ({ _message: 'The selected user is not an editor' })
 
-    let startIndex = dev.authorizedEditors.indexOf(req.body.editorID)
-    dev.authorizedEditors.splice(startIndex, 1)
-    await dev.save()
+        let startIndex = dev.authorizedEditors.indexOf(req.body.editorID)
+        dev.authorizedEditors.splice(startIndex, 1)
+        await dev.save()
 
-    return await getOne(req, res)
+        return await getOne(req, res)
+
+    } catch (err) { errorHandler(err, req, res) }
 }
 
 
