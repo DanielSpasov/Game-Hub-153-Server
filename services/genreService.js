@@ -90,8 +90,8 @@ const comment = async (req, res) => {
     try {
         let reqGenre = await Genre.findById(req.params.id)
         reqGenre.comments.push({ author: req.body.username, content: req.body.content })
-        const genre = await Genre.findByIdAndUpdate(req.params.id, reqGenre)
-        return genre
+        await Genre.findByIdAndUpdate(req.params.id, reqGenre)
+        return await getOne(req, res)
     } catch (err) { errorHandler(err, req, res) }
 }
 

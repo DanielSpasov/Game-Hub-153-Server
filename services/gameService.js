@@ -132,8 +132,8 @@ const comment = async (req, res) => {
     try {
         let reqGame = await Game.findById(req.params.id)
         reqGame.comments.push({ author: req.body.username, content: req.body.content })
-        const game = await Game.findByIdAndUpdate(req.params.id, reqGame)
-        return game
+        await Game.findByIdAndUpdate(req.params.id, reqGame)
+        return await getOne(req, res)
     } catch (err) { errorHandler(err, req, res) }
 }
 
