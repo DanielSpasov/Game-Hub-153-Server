@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const errorHandler = require('../middlewares/errorHandler')
 
 const User = require('../Models/User')
 
@@ -80,12 +81,26 @@ const getOne = async (req, res) => {
             .populate('upvotedGames')
             .populate('upvotedGenres')
             .populate('upvotedDevs')
-    
+
         userData.password = ''
-        return res.json(userData)
+        return userData
+
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
+}
+
+const changeUsername = async (req, res) => {
+    try {
+
+        let user = await User.findById(req.params.id)
+        user.username = req.body.username
+        await user.save()
+
+        req.params.username = req.body.username
+        return await getOne(req, res)
+
+    } catch (err) { errorHandler(err, req, res) }
 }
 
 
@@ -94,4 +109,5 @@ module.exports = {
     register,
     tokenIsValid,
     getOne,
+    changeUsername,
 }
