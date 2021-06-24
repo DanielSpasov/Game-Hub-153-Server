@@ -73,9 +73,25 @@ const tokenIsValid = async (req, res) => {
     }
 }
 
+const getOne = async (req, res) => {
+    try {
+        let userData = await User
+            .findOne({ username: req.params.username })
+            .populate('upvotedGames')
+            .populate('upvotedGenres')
+            .populate('upvotedDevs')
+    
+        userData.password = ''
+        return res.json(userData)
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}
+
 
 module.exports = {
     login,
     register,
     tokenIsValid,
+    getOne,
 }
