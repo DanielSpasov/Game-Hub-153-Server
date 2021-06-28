@@ -15,7 +15,9 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const devs = Dev.find({})
+        let devs
+        if (!req.query.search) devs = await Dev.find({})
+        if (req.query.search) devs = await Dev.aggregate([{ $search: { text: { query: req.query.search, path: 'title' } } }])
         return devs
     } catch (err) { errorHandler(err, req, res) }
 }

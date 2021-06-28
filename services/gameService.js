@@ -27,7 +27,9 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const games = Game.find({})
+        let games
+        if (!req.query.search) games = await Game.find({})
+        if (req.query.search) games = await Game.aggregate([{ $search: { text: { query: req.query.search, path: 'title' } } }])
         return games
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -163,13 +165,13 @@ const removeEditor = async (req, res) => {
 
         let game = await Game.findById(req.params.id)
         if (game.creator != req.body.userID) throw ({ _message: 'You don\'t have permission to remove editors' })
-    
+
         if (!game.authorizedEditors.includes(req.body.editorID)) throw ({ _message: 'The selected user is not an editor' })
-    
+
         let startIndex = game.authorizedEditors.indexOf(req.body.editorID)
         game.authorizedEditors.splice(startIndex, 1)
         await game.save()
-    
+
         return await getOne(req, res)
 
     } catch (err) { errorHandler(err, req, res) }
