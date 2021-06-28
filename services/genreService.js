@@ -24,10 +24,11 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
     try {
-        const genre = Genre
+        const genre = await Genre
             .findById(req.params.id)
             .populate('gamesInGenre')
             .populate('authorizedEditors', 'email')
+            .populate('comments.author', 'username')
         return genre
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -91,7 +92,7 @@ const deleteGenre = async (req, res) => {
 const comment = async (req, res) => {
     try {
         let reqGenre = await Genre.findById(req.params.id)
-        reqGenre.comments.push({ author: req.body.username, content: req.body.content })
+        reqGenre.comments.push({ author: req.body.userID, content: req.body.content })
         await Genre.findByIdAndUpdate(req.params.id, reqGenre)
         return await getOne(req, res)
     } catch (err) { errorHandler(err, req, res) }

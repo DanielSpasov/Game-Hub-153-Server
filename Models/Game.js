@@ -42,10 +42,10 @@ const gameSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'User',
     }],
-    comments: {
-        type: Array,
-        default: [],
-    },
+    comments: [{
+        author: { type: mongoose.Types.ObjectId, ref: 'User' },
+        content: { type: String },
+    }],
     creator: {
         type: mongoose.Types.ObjectId,
         required: true,

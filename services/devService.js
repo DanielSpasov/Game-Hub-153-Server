@@ -24,10 +24,11 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
     try {
-        const dev = Dev
+        const dev = await Dev
             .findById(req.params.id)
             .populate('gamesByDev')
             .populate('authorizedEditors', 'email')
+            .populate('comments.author', 'username')
         return dev
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -91,7 +92,7 @@ const deleteDev = async (req, res) => {
 const comment = async (req, res) => {
     try {
         let reqDev = await Dev.findById(req.params.id)
-        reqDev.comments.push({ author: req.body.username, content: req.body.content })
+        reqDev.comments.push({ author: req.body.userID, content: req.body.content })
         await Dev.findByIdAndUpdate(req.params.id, reqDev)
         return await getOne(req, res)
     } catch (err) { errorHandler(err, req, res) }

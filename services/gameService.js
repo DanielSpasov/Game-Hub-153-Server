@@ -36,11 +36,12 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
     try {
-        const game = Game
+        const game = await Game
             .findById(req.params.id)
             .populate('genre')
             .populate('dev')
             .populate('authorizedEditors', 'email')
+            .populate('comments.author', 'username')
         return game
     } catch (err) { errorHandler(err, req, res) }
 }
@@ -133,7 +134,7 @@ const deleteGame = async (req, res) => {
 const comment = async (req, res) => {
     try {
         let reqGame = await Game.findById(req.params.id)
-        reqGame.comments.push({ author: req.body.username, content: req.body.content })
+        reqGame.comments.push({ author: req.body.userID, content: req.body.content })
         await Game.findByIdAndUpdate(req.params.id, reqGame)
         return await getOne(req, res)
     } catch (err) { errorHandler(err, req, res) }
